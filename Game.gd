@@ -1,22 +1,26 @@
 extends Node2D
 
-var Brick = preload('res://Brick.tscn')
+var brick_scene = preload('res://Brick.tscn')
 
 var selected_bricks: Array[Brick] = []
 
+var grid: Dictionary = {} # Vector2i to Brick
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	for x in range(5):
-		var new_brick: Brick = Brick.instantiate()
-		new_brick.position = Vector2(x*200, 100)
-		new_brick.brick_id = x
-		new_brick.clicked.connect(_on_brick_clicked)
-		new_brick.hovered.connect(_on_brick_hovered)
-		
-		add_child(new_brick)
+	for x in range(Brick.WIDTH):
+		for y in range(Brick.HEIGHT):
+			if x % 2 == 1 and y == Brick.HEIGHT - 1:
+				continue
+			var grid_position = Vector2i(x, y)
+			var new_brick: Brick = brick_scene.instantiate()
+			new_brick.set_grid_position(grid_position)
+			new_brick.clicked.connect(_on_brick_clicked)
+			new_brick.hovered.connect(_on_brick_hovered)
+			
+			$Background.add_child(new_brick)
 
 func _on_brick_clicked(brick: Brick, mouse_position: Vector2):
-	print('brick clicked: ' + var_to_str(brick.brick_id))
 	selected_bricks = [brick]
 	selected_bricks[-1].draw_line_target(mouse_position)
 

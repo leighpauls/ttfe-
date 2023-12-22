@@ -1,9 +1,8 @@
 extends Polygon2D
 class_name Line
 
-
 func set_target(target_point: Vector2):
-	var delta = target_point - get_global_transform().get_origin()
+	var delta = get_parent().to_local(target_point)
 	
 	var distance = delta.length()
 	var angle = delta.angle()
