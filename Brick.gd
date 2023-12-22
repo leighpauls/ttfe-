@@ -48,3 +48,16 @@ func hide_line():
 
 func _is_on_brick(point: Vector2):
 	return Geometry2D.is_point_in_polygon(to_local(point), self.get_polygon())
+
+func is_adjacent(other: Brick):
+	var delta = other._grid_position - _grid_position
+	if delta.x == 0:
+		return delta.y == 1 or delta.y == -1
+
+	if delta.x == 1 or delta.x == -1:
+		if _grid_position.x % 2 == 0:
+			return delta.y == -1 or delta.y == 0
+		else:
+			return delta.y == 0 or delta.y == 1
+	return false
+		

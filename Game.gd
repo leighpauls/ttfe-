@@ -25,10 +25,18 @@ func _on_brick_clicked(brick: Brick, mouse_position: Vector2):
 	selected_bricks[-1].draw_line_target(mouse_position)
 
 func _on_brick_hovered(brick: Brick):
-	if selected_bricks.size() > 0 and brick not in selected_bricks:
-		var prev_brick = selected_bricks[-1]
-		selected_bricks.push_back(brick)
-		prev_brick.draw_line_target(brick.get_global_position())
+	if selected_bricks.size() == 0:
+		return
+	
+	var prev_brick = selected_bricks[-1]
+	if prev_brick.is_adjacent(brick):
+		if brick not in selected_bricks: 
+			selected_bricks.push_back(brick)
+			prev_brick.draw_line_target(brick.get_global_position())
+		else:
+			while selected_bricks[-1] != brick:
+				var popped_brick = selected_bricks.pop_back()
+				popped_brick.hide_line()
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and selected_bricks.size() > 0:
