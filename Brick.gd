@@ -8,11 +8,16 @@ const SPACING = 120.0
 signal clicked(brick: Brick, mouse_position: Vector2)
 signal hovered(brick: Brick)
 
+var brick_number: int
+
 var _line: Line
 var _grid_position: Vector2i
 
 func _ready():
 	_line = $Line
+
+func _process(delta):
+	$label.set_text(var_to_str(brick_number))
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:

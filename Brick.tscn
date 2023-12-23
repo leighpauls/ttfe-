@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3qnaj4ngqqan"]
+[gd_scene load_steps=4 format=3 uid="uid://b3qnaj4ngqqan"]
 
 [ext_resource type="Script" path="res://Brick.gd" id="2_0ffmt"]
 [ext_resource type="Script" path="res://Line.gd" id="3_imkud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pw6qh"]
+font_size = 40
 
 [node name="brick" type="Polygon2D"]
 z_index = 2
@@ -14,3 +17,13 @@ visible = false
 z_index = -1
 polygon = PackedVector2Array(2.08165e-12, 10, 100, 10, 100, -10, 2.08165e-12, -10)
 script = ExtResource("3_imkud")
+
+[node name="label" type="Label" parent="."]
+offset_left = -41.0
+offset_top = -27.0
+offset_right = 41.0
+offset_bottom = 28.0
+text = "2"
+label_settings = SubResource("LabelSettings_pw6qh")
+horizontal_alignment = 1
+vertical_alignment = 1
