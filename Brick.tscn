@@ -4,13 +4,14 @@
 [ext_resource type="Script" path="res://Line.gd" id="3_imkud"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pw6qh"]
-font_size = 40
+font_size = 32
 
 [node name="brick" type="Polygon2D"]
 z_index = 2
 color = Color(0, 0.447059, 0.447059, 1)
 polygon = PackedVector2Array(-25, -43, 25, -43, 50, 2.08165e-12, 25, 43, -25, 43, -50, 2.08165e-12)
 script = ExtResource("2_0ffmt")
+metadata/colors = PackedColorArray(0, 0.517647, 0.462745, 1, 0.648866, 0.00016926, 0.599398, 1, 0, 0.473371, 0.116767, 1, 0.179606, 0.216637, 1, 1, 0.670357, 0.208561, 0, 1, 1.83241e-06, 0.428839, 0.555154, 1, 0.519686, 0.00301959, 0.851675, 1, 0.580392, 0.309804, 0, 1, 0.364423, 0.498719, 0, 1, 0.428702, 0.251548, 1, 1, 0.836598, 0, 0.12495, 1, 0, 0.536152, 0.251751, 1)
 
 [node name="Line" type="Polygon2D" parent="."]
 visible = false
@@ -23,7 +24,7 @@ offset_left = -41.0
 offset_top = -27.0
 offset_right = 41.0
 offset_bottom = 28.0
-text = "2"
+text = "256K"
 label_settings = SubResource("LabelSettings_pw6qh")
 horizontal_alignment = 1
 vertical_alignment = 1

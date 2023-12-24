@@ -16,12 +16,12 @@ func _ready():
 		for y in range(Brick.HEIGHT):
 			if x % 2 == 1 and y == Brick.HEIGHT - 1:
 				continue
-			_create_brick(Vector2i(x, y))
+			_create_brick(Vector2i(x, y), [2, 4, 8])
 
-func _create_brick(grid_position: Vector2i) -> Brick:
+func _create_brick(grid_position: Vector2i, number_bag: Array[int]) -> Brick:
 	var new_brick: Brick = brick_scene.instantiate()
 	
-	new_brick.brick_number = int(pow(2, rng.randi_range(1, 3)))
+	new_brick.brick_number = number_bag[rng.randi_range(0, number_bag.size() - 1)]
 	
 	new_brick.clicked.connect(_on_brick_clicked)
 	new_brick.hovered.connect(_on_brick_hovered)
@@ -91,14 +91,27 @@ func _handle_release_selected():
 		var removed_grid_position = removed_brick.get_grid_position()
 		_brick_parent.remove_child(removed_brick)
 		
-		for child in _brick_parent.get_children():
-			var b := child as Brick
-			if b == null:
-				continue
-			
+		for b in _all_bricks():			
 			var p = b.get_grid_position()
 			
 			if p.x == removed_grid_position.x and p.y < removed_grid_position.y:
 				b.set_grid_position(p + Vector2i(0, 1))
 		
-		_create_brick(Vector2i(removed_grid_position.x, 0))
+		_create_brick(Vector2i(removed_grid_position.x, 0), _make_number_bag())
+
+func _all_bricks() -> Array[Brick]:
+	var result: Array[Brick] = []
+	for child in _brick_parent.get_children():
+		var b := child as Brick
+		if b != null:
+			result.push_back(b)
+	return result
+
+func _make_number_bag() -> Array[int]:
+	var seed_numbers := [2, 4, 8]
+	var result: Array[int] = []
+	for _i in range(5):
+		result.append(seed_numbers)
+	for brick in _all_bricks():
+		result.push_back(brick.brick_number)
+	return result

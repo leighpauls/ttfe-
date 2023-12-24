@@ -10,6 +10,8 @@ signal hovered(brick: Brick)
 
 const MOVEMENT_ANIMATION_DURATION = 0.25
 
+var _colors: PackedColorArray
+
 var brick_number: int
 
 var _line: Line
@@ -25,6 +27,8 @@ func _ready():
 	_line = $Line
 	_label = $label
 	_animation_player = $AnimationPlayer
+	
+	_colors = get_meta("colors", PackedColorArray([color]))
 	
 	var animation_name = 'movement'
 	var library_name = 'dynamic'
@@ -45,7 +49,23 @@ func _ready():
 	_animation_player.add_animation_library(library_name, lib)
 
 func _process(_delta):
-	_label.set_text(var_to_str(brick_number))
+	var color_idx = int(log(brick_number) / log(2)) % _colors.size()
+	color = _colors[color_idx]
+	
+	var display_number := brick_number
+	var display_unit := ''
+	if display_number >= 1024:
+		display_number /= 1024
+		display_unit = 'K'
+	if display_number >= 1024:
+		display_number /= 1024
+		display_unit = 'M'
+	if display_number >= 1024:
+		display_number /= 1024
+		display_unit = 'G'
+	
+	
+	_label.set_text(str(display_number) + display_unit)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
