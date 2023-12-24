@@ -5,7 +5,6 @@ var brick_scene = preload('res://Brick.tscn')
 var rng = RandomNumberGenerator.new()
 
 var selected_bricks: Array[Brick] = []
-
 var grid: Dictionary = {} # Vector2i to Brick
 
 # Called when the node enters the scene tree for the first time.
@@ -17,13 +16,14 @@ func _ready():
 			var grid_position = Vector2i(x, y)
 			var new_brick: Brick = brick_scene.instantiate()
 			
-			new_brick.set_grid_position(grid_position)
 			new_brick.brick_number = int(pow(2, rng.randi_range(1, 3)))
 			
 			new_brick.clicked.connect(_on_brick_clicked)
 			new_brick.hovered.connect(_on_brick_hovered)
 			
 			$Background.add_child(new_brick)
+			
+			new_brick.set_grid_position(grid_position)
 
 func _on_brick_clicked(brick: Brick, mouse_position: Vector2):
 	selected_bricks = [brick]
