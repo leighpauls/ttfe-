@@ -8,7 +8,7 @@ const SPACING = 120.0
 signal clicked(brick: Brick, mouse_position: Vector2)
 signal hovered(brick: Brick)
 
-const MOVEMENT_ANIMATION_DURATION = 0.5
+const MOVEMENT_ANIMATION_DURATION = 0.25
 
 var brick_number: int
 
@@ -38,6 +38,7 @@ func _ready():
 	_movement_animation.track_insert_key(_movement_animation_track, 0.0, position)
 	_movement_animation.track_insert_key(
 		_movement_animation_track, MOVEMENT_ANIMATION_DURATION, Vector2(300, 300))
+	_movement_animation.track_set_interpolation_type(_movement_animation_track, Animation.INTERPOLATION_CUBIC)
 	
 	var lib = AnimationLibrary.new()
 	lib.add_animation(animation_name, _movement_animation)
