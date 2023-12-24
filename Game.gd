@@ -2,28 +2,38 @@ extends Node2D
 
 var brick_scene = preload('res://Brick.tscn')
 
-var rng = RandomNumberGenerator.new()
+var _brick_parent: Node
 
+var rng := RandomNumberGenerator.new()
 var selected_bricks: Array[Brick] = []
-var grid: Dictionary = {} # Vector2i to Brick
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	_brick_parent = $Background
+	
 	for x in range(Brick.WIDTH):
 		for y in range(Brick.HEIGHT):
 			if x % 2 == 1 and y == Brick.HEIGHT - 1:
 				continue
-			var grid_position = Vector2i(x, y)
-			var new_brick: Brick = brick_scene.instantiate()
-			
-			new_brick.brick_number = int(pow(2, rng.randi_range(1, 3)))
-			
-			new_brick.clicked.connect(_on_brick_clicked)
-			new_brick.hovered.connect(_on_brick_hovered)
-			
-			$Background.add_child(new_brick)
-			
-			new_brick.set_grid_position(grid_position)
+			_create_brick(Vector2i(x, y))
+
+func _create_brick(grid_position: Vector2i) -> Brick:
+	var new_brick: Brick = brick_scene.instantiate()
+	
+	new_brick.brick_number = int(pow(2, rng.randi_range(1, 3)))
+	
+	new_brick.clicked.connect(_on_brick_clicked)
+	new_brick.hovered.connect(_on_brick_hovered)
+	
+	var p := Brick.grid_to_position(grid_position)
+	new_brick.position = Vector2(p.x, -200)
+	
+	_brick_parent.add_child(new_brick)
+	
+	new_brick.set_grid_position(grid_position)
+	
+	return new_brick
 
 func _on_brick_clicked(brick: Brick, mouse_position: Vector2):
 	selected_bricks = [brick]
@@ -78,4 +88,17 @@ func _handle_release_selected():
 	
 	while selected_bricks.size() > 0:
 		var removed_brick = selected_bricks.pop_front()
-		removed_brick.get_parent().remove_child(removed_brick)
+		var removed_grid_position = removed_brick.get_grid_position()
+		_brick_parent.remove_child(removed_brick)
+		
+		for child in _brick_parent.get_children():
+			var b := child as Brick
+			if b == null:
+				continue
+			
+			var p = b.get_grid_position()
+			
+			if p.x == removed_grid_position.x and p.y < removed_grid_position.y:
+				b.set_grid_position(p + Vector2i(0, 1))
+		
+		_create_brick(Vector2i(removed_grid_position.x, 0))

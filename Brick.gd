@@ -61,28 +61,30 @@ func _unhandled_input(event):
 	if event is InputEventMouseMotion and _is_on_brick(event.get_position()):
 		hovered.emit(self)
 
-func set_grid_position(grid_position: Vector2i):
+func set_grid_position(grid_position: Vector2i) -> void:
 	_grid_position = grid_position
-	_start_animation()
 	
-
-func _start_animation():
-	if _animation_player == null:
-		print('skipping animation')
-		return
-	var y_offset
-	if _grid_position.x % 2 == 0:
-		y_offset = Vector2.ZERO
-	else:
-		y_offset = Vector2(0, SPACING / 2)
-	var new_position = Vector2(SPACING/2, SPACING/2) + SPACING * _grid_position + y_offset
-	
-	print('animating to %s' % new_position)
-	_animation_player.stop()
+	var new_position := grid_to_position(_grid_position)
+	_animation_player.stop(true)
 	_movement_animation.track_set_key_value(_movement_animation_track, 0, position)
 	_movement_animation.track_set_key_value(_movement_animation_track, 1, new_position)
 	_animation_player.play(_movement_animation_name)
+
+
+func get_grid_position() -> Vector2i:
+	return _grid_position
+
+static func grid_to_position(grid_position: Vector2i) -> Vector2:
+	var y_offset: Vector2
+	if grid_position.x % 2 == 0:
+		y_offset = Vector2.ZERO
+	else:
+		y_offset = Vector2(0, SPACING / 2)
 	
+	return (
+		Vector2(SPACING/2, SPACING/2)
+		+ SPACING * grid_position
+		+ y_offset)
 
 func draw_line_target(target_position: Vector2):
 	_line.set_visible(true)
