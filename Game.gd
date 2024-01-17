@@ -38,6 +38,7 @@ func _create_brick(grid_position: Vector2i, number_bag: Array[int]) -> Brick:
 func _on_brick_clicked(brick: Brick, mouse_position: Vector2):
 	selected_bricks = [brick]
 	selected_bricks[-1].draw_line_target(mouse_position)
+	brick.scale = Vector2(1.1, 1.1)
 
 func _on_brick_hovered(brick: Brick):
 	if selected_bricks.size() == 0:
@@ -49,6 +50,7 @@ func _on_brick_hovered(brick: Brick):
 		while selected_bricks[-1] != brick:
 			var popped_brick = selected_bricks.pop_back()
 			popped_brick.hide_line()
+			popped_brick.scale = Vector2(1, 1)
 		return
 	
 	var expected_numbers: Array[int]
@@ -61,6 +63,7 @@ func _on_brick_hovered(brick: Brick):
 	if prev_brick.is_adjacent(brick) and brick.brick_number in expected_numbers: 
 		selected_bricks.push_back(brick)
 		prev_brick.draw_line_target(brick.get_global_position())
+		brick.scale = Vector2(1.1, 1.1)
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion and selected_bricks.size() > 0:
@@ -76,6 +79,7 @@ func _handle_release_selected():
 	var selected_total: int = 0
 	for brick in selected_bricks:
 		brick.hide_line()
+		brick.scale = Vector2(1, 1)
 		selected_total += brick.brick_number
 	
 	if selected_bricks.size() <= 1:
